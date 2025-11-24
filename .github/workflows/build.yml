@@ -39,12 +39,12 @@ jobs:
 
     - name: Check Auth Status
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.ACTION_TOKEN }}
       run: gh auth status
 
     - name: Create Release
       if: startsWith(github.ref, 'refs/tags/')
       env:
-        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GH_TOKEN: ${{ secrets.ACTION_TOKEN }}
       run: |
-        gh release create ${{ github.ref_name }} dist/CountdownClock.exe --title "Countdown Clock ${{ github.ref_name }}" --generate-notes
+        gh release create ${{ github.ref_name }} dist/CountdownClock.exe --repo ${{ github.repository }} --title "Countdown Clock ${{ github.ref_name }}" --generate-notes
