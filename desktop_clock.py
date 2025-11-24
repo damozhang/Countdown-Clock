@@ -5,12 +5,35 @@ from datetime import datetime, timedelta
 import json
 import os
 
+# UI Configuration / Theme
+class Theme:
+    # Window
+    WINDOW_SIZE = "900x300"
+    BG_COLOR = "black"
+
+    # Fonts
+    FONT_FAMILY = "Helvetica"
+    FONT_SIZE_MAIN = 120
+    FONT_SIZE_LARGE = 28
+    FONT_SIZE_INPUT = 14
+    FONT_SIZE_HINT = 10
+
+    # Colors
+    COLOR_MAIN = "white"
+    COLOR_ALERT = "red"
+    COLOR_CURRENT_TIME = "#666666"
+    COLOR_TARGET_TIME = "yellow"
+    COLOR_HINT = "gray"
+
+    # Layout
+    PADDING_Y = 20
+
 class DesktopClock:
     def __init__(self, root):
         self.root = root
-        self.root.title("Desktop Clock")
-        self.root.geometry("900x300")
-        self.root.configure(bg='black')
+        self.root.title("Countdown Clock")
+        self.root.geometry(Theme.WINDOW_SIZE)
+        self.root.configure(bg=Theme.BG_COLOR)
 
         # Config file for saving window position
         self.config_file = os.path.join(os.path.expanduser("~"), ".countdownclock_config.json")
@@ -30,17 +53,37 @@ class DesktopClock:
         # UI Elements - use absolute positioning for precise layout
         # Current time display (top, 20px from top)
         self.current_time_str = tk.StringVar()
-        self.current_time_label = tk.Label(self.root, textvariable=self.current_time_str, font=("Helvetica", 28, "bold"), fg="#666666", bg="black")
-        self.current_time_label.place(relx=0.5, y=20, anchor='n')
+        self.current_time_label = tk.Label(
+            self.root,
+            textvariable=self.current_time_str,
+            font=(Theme.FONT_FAMILY, Theme.FONT_SIZE_LARGE, "bold"),
+            fg=Theme.COLOR_CURRENT_TIME,
+            bg=Theme.BG_COLOR
+        )
+        self.current_time_label.place(relx=0.5, y=Theme.PADDING_Y, anchor='n')
 
         # Main countdown display (vertically centered)
-        self.label = tk.Label(self.root, textvariable=self.time_str, font=("Helvetica", 120, "bold"), fg="white", bg="black")
+        self.time_str = tk.StringVar()
+        self.label = tk.Label(
+            self.root,
+            textvariable=self.time_str,
+            font=(Theme.FONT_FAMILY, Theme.FONT_SIZE_MAIN, "bold"),
+            fg=Theme.COLOR_MAIN,
+            bg=Theme.BG_COLOR
+        )
         self.label.place(relx=0.5, rely=0.5, anchor='center')
 
         # Target time display (bottom, 20px from bottom)
         self.target_str = tk.StringVar()
-        self.target_label = tk.Label(self.root, textvariable=self.target_str, font=("Helvetica", 28, "bold"), fg="yellow", bg="black", cursor="hand2")
-        self.target_label.place(relx=0.5, rely=1.0, y=-20, anchor='s')
+        self.target_label = tk.Label(
+            self.root,
+            textvariable=self.target_str,
+            font=(Theme.FONT_FAMILY, Theme.FONT_SIZE_LARGE, "bold"),
+            fg=Theme.COLOR_TARGET_TIME,
+            bg=Theme.BG_COLOR,
+            cursor="hand2"
+        )
+        self.target_label.place(relx=0.5, rely=1.0, y=-Theme.PADDING_Y, anchor='s')
         self.target_label.bind("<Button-1>", lambda e: self.set_countdown())
 
         # Bindings for window dragging
@@ -218,8 +261,8 @@ class DesktopClock:
         top.focus_force()
 
         tk.Label(top, text="Enter target time:").pack(pady=5)
-        tk.Label(top, text="(HH:MM or HH:MM:SS)", font=("Helvetica", 10), fg="gray").pack()
-        entry = tk.Entry(top, font=("Helvetica", 14))
+        tk.Label(top, text="(HH:MM or HH:MM:SS)", font=(Theme.FONT_FAMILY, Theme.FONT_SIZE_HINT), fg=Theme.COLOR_HINT).pack()
+        entry = tk.Entry(top, font=(Theme.FONT_FAMILY, Theme.FONT_SIZE_INPUT))
         entry.pack(pady=5)
         entry.insert(0, "11:29")  # Default example
         entry.focus_set()  # Set focus to entry field
@@ -280,17 +323,17 @@ class DesktopClock:
                 if time_remaining <= 10:
                     # Toggle between red and white every 500ms
                     if int(time_remaining * 2) % 2 == 0:
-                        self.label.config(fg="red")
+                        self.label.config(fg=Theme.COLOR_ALERT)
                     else:
-                        self.label.config(fg="white")
+                        self.label.config(fg=Theme.COLOR_MAIN)
                 else:
-                    self.label.config(fg="white")
+                    self.label.config(fg=Theme.COLOR_MAIN)
                     self.flash_state = False
             else:
                 # Countdown finished - show 00:00:00.000
                 self.countdown_time = 0
                 self.time_str.set("00:00:00.000")
-                self.label.config(fg="white")
+                self.label.config(fg=Theme.COLOR_MAIN)
                 self.root.update() # Ensure UI updates before blocking message box
                 messagebox.showinfo("Time's up!", "Countdown finished!")
         else:
