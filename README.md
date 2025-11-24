@@ -3,6 +3,7 @@
 ![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-blue)
 ![Python](https://img.shields.io/badge/python-3.12%2B-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
+![GitHub Release](https://img.shields.io/github/v/release/damozhang/countdown-clock?include_prereleases)
 
 A minimalist, always-on-top desktop countdown timer that displays a highly visible countdown to a specific time on your screen.
 
@@ -11,9 +12,15 @@ Perfect for presentations, live streaming, broadcasts, meetings, or any scenario
 ## Download
 
 ### Windows
-See [build_instructions.md](build_instructions.md) for instructions on building the Windows executable.
+**Option 1: Download Pre-built Executable (Recommended)**
 
-Alternatively, download pre-built `CountdownClock.exe` from the [Releases](https://github.com/damozhang/countdown-clock/releases) page (when available).
+Download the latest `CountdownClock.exe` from the [**Releases**](https://github.com/damozhang/countdown-clock/releases/latest) page.
+
+No installation required - just download and run!
+
+**Option 2: Build from Source**
+
+See [build_instructions.md](build_instructions.md) for detailed instructions.
 
 ### macOS
 Clone this repository and run with Python 3.12+:
