@@ -1,0 +1,52 @@
+name: Build Windows Executable
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger on version tags like v1.0.0
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install uv
+      run: pip install uv
+
+    - name: Install dependencies
+      run: uv pip install --system pyinstaller
+
+    - name: Build executable
+      run: uv run pyinstaller --noconsole --onefile --name "CountdownClock" desktop_clock.py
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: CountdownClock-Windows
+        path: dist/CountdownClock.exe
+
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: dist/CountdownClock.exe
+        body: |
+          ## Countdown Clock ${{ github.ref_name }}
+
+          ### Download
+          - **Windows**: Download `CountdownClock.exe` below
+          - **macOS**: See README for installation instructions
+
+          ### What's New
+          See commit history for changes in this release.
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
