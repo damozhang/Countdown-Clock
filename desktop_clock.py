@@ -13,7 +13,7 @@ class Theme:
 
     # Fonts
     FONT_FAMILY = "Helvetica"
-    FONT_SIZE_MAIN = 120
+    FONT_SIZE_MAIN = 100
     FONT_SIZE_LARGE = 28
     FONT_SIZE_INPUT = 14
     FONT_SIZE_HINT = 10
